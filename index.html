@@ -2,74 +2,89 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <!-- 响应式适配手机/电脑 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <!-- SEO优化：标题和描述 -->
-  <title>Jackson Wang </title>
-  <meta name="description" content="Jackson Wang">
+  <title>Jackson Wang - Personal Homepage</title>
+  <meta name="description" content="Jackson Wang's Personal Homepage, Academic Papers and Educational Background">
   <!-- 引入样式文件 -->
   <link rel="stylesheet" href="style.css">
-  <!-- 引入图标（可选，用Font Awesome） -->
+  <!-- 引入Font Awesome图标库 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <!-- 头部：个人信息 -->
   <header class="header">
     <div class="avatar">
-      <!-- 替换成你的头像链接（可上传到GitHub/Gitee） -->
-      <img src="wn.jpg" alt="头像">
+      <img src="wn.jpg" alt="Jackson Wang Avatar">
     </div>
-    <h1>Ning Wang</h1>
-    <p class="tag">WELCOME TO MY PAGE</p>
+    <h1>Ning Wang (Jackson)</h1>
+    <p class="tag">WELCOME TO MY PERSONAL HOMEPAGE</p>
     <div class="contact">
-      <!-- 替换成你的联系方式 -->
-      <a href="mailto:wangning@mails.neu.edu.com" title="wangning@mails.neu.edu.com"><i class="fa fa-envelope"></i></a>
-      <a href="https://github.com/LJJ-wn" title="https://github.com/LJJ-wn"><i class="fa fa-github"></i></a>
-      <a href="Palpitate1307" title="WeChat"><i class="fa fa-code"></i></a>
+      <!-- 邮箱图标 -->
+      <a href="mailto:wangning@mails.neu.edu.com" title="Email: wangning@mails.neu.edu.com" target="_blank">
+        <i class="fa fa-envelope"></i>
+      </a>
+      <!-- GitHub图标 -->
+      <a href="https://github.com/LJJ-wn" title="GitHub: LJJ-wn" target="_blank">
+        <i class="fa fa-github"></i>
+      </a>
+      <!-- 微信图标（修正后） -->
+      <a href="javascript:void(0)" title="WeChat: Palpitate1307" class="wechat-link">
+        <i class="fa fa-weixin"></i>
+      </a>
     </div>
   </header>
 
-  <!-- 技能区 -->
-  <section class="Educational background">
-    <h2>EDU</h2>
-    <div class="skills-list">
-      <span>2018-2022 Dezhou University  Network Engineering     B.Eng.</span>
-      <span>2022-2015 Shenyang University of Chemical Technology     MS.Eng</span>
-      <span> 2025- Northeastern University </span>
+  <!-- 教育背景区（修正class名：去掉空格） -->
+  <section class="section educational-background">
+    <h2><i class="fa fa-graduation-cap"></i> Educational Background</h2>
+    <div class="edu-list">
+      <div class="edu-item">
+        <span class="edu-time">2018-2022</span>
+        <span class="edu-content">Dezhou University | Network Engineering | B.Eng.</span>
+      </div>
+      <div class="edu-item">
+        <span class="edu-time">2022-2025</span> <!-- 修正笔误：2022-2015 → 2022-2025 -->
+        <span class="edu-content">Shenyang University of Chemical Technology | MS.Eng</span>
+      </div>
+      <div class="edu-item">
+        <span class="edu-time">2025- Present</span>
+        <span class="edu-content">Northeastern University</span>
+      </div>
     </div>
   </section>
 
-  <!-- 项目区 -->
-  <section class="Papers">
-    <h2>Published</h2>
-    <div class="project-card">
+  <!-- 论文区（修正class名：小写+统一） -->
+  <section class="section papers">
+    <h2><i class="fa fa-file-text-o"></i> Published Papers</h2>
+    <div class="paper-card">
       <h3>A Cluster Routing Protocol Based on Energy and Controllable Cluster Size</h3>
       <p>In response to the demands of industrial wireless sensor networks, based on the LEACH protocol, an improved algorithm -LEACH-EKN is proposed.</p>
-      <a href="10.3969/j.issn.1002-0640.2024.11.013" target="_blank">CrossRef <i class="fa fa-external-link"></i></a>
+      <a href="https://doi.org/10.3969/j.issn.1002-0640.2024.11.013" target="_blank">
+        CrossRef <i class="fa fa-external-link"></i>
+      </a>
     </div>
-    <div class="project-card">
+    <div class="paper-card">
       <h3>An Improved Data Fusion Algorithm Based on Cluster Head Election and Grey Prediction</h3>
       <p>In traditional Wireless Sensor Network routing protocols, data collected through timed interval sensing tends to have high temporal redundancy, which leads to unnecessary energy drain.</p>
-      <a href="https://ieeexplore.ieee.org/document/10419333" target="_blank">CrossRef <i class="fa fa-external-link"></i></a>
+      <a href="https://ieeexplore.ieee.org/document/10419333" target="_blank">
+        CrossRef <i class="fa fa-external-link"></i>
+      </a>
     </div>
-    <div class="project-card">
+    <div class="paper-card">
       <h3>GCP: A multi-strategy improved wireless sensor network model for environmental monitoring</h3>
-      <p>•Propose a genetic algorithm based cluster head election strategy for WSN.
-         •Propose a grey prediction method that cuts energy use in data transmission.
+      <p>•Propose a genetic algorithm based cluster head election strategy for WSN.<br>
+         •Propose a grey prediction method that cuts energy use in data transmission.<br>
          •Applying the WSN model with above improvements to environmental monitoring.</p>
-      <a href="https://www.sciencedirect.com/science/article/pii/S138912862400639X" target="_blank">CrossRef <i class="fa fa-external-link"></i></a>
+      <a href="https://www.sciencedirect.com/science/article/pii/S138912862400639X" target="_blank">
+        CrossRef <i class="fa fa-external-link"></i>
+      </a>
     </div>
   </section>
 
   <!-- 页脚 -->
   <footer class="footer">
-    <p>© 2025 Jackson Wang | HomePage</p>
+    <p>© 2025 Jackson Wang | All Rights Reserved</p>
+    <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
 </body>
-
 </html>
-
-
-
-
-
