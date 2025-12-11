@@ -194,6 +194,99 @@ body {
   font-size: 12px;
   margin-left: 5px;
 }
+/* 科研项目样式 */
+.research-projects {
+  overflow-x: auto; /* 适配长项目名称，防止横向溢出 */
+}
+
+/* 项目表头 */
+.project-header {
+  display: flex;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #165dff, #722ed1);
+  color: white;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.header-item {
+  flex: 1;
+  text-align: left;
+  padding: 0 8px;
+}
+
+/* 调整列宽比例（项目列占比更高） */
+.project-col {
+  flex: 4;
+}
+.time-col {
+  flex: 1;
+  text-align: center;
+}
+.work-col {
+  flex: 3;
+}
+
+/* 项目列表 */
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-item {
+  display: flex;
+  padding: 18px 20px;
+  background-color: #f8f9fc;
+  border-radius: 8px;
+  align-items: center;
+  border-left: 3px solid #165dff;
+}
+
+.project-name {
+  flex: 4;
+  color: #1d2129;
+  font-weight: 500;
+  padding: 0 8px;
+}
+
+.project-time {
+  flex: 1;
+  color: #722ed1;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 8px;
+}
+
+.project-work {
+  flex: 3;
+  color: #4e5969;
+  padding: 0 8px;
+}
+
+/* 响应式适配 - 手机端科研项目区 */
+@media (max-width: 768px) {
+  .project-header {
+    font-size: 14px;
+  }
+  .project-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 15px 18px;
+  }
+  .project-name, .project-time, .project-work {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+  }
+  .project-time {
+    color: #165dff;
+    font-size: 14px;
+  }
+}
 /* 奖项展示样式 - 含图标适配 */
 .awards-list {
   display: flex;
@@ -316,4 +409,5 @@ body {
 .fa-weixin {
   font-size: 24px !important;
 }
+
 
