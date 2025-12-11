@@ -194,7 +194,60 @@ body {
   font-size: 12px;
   margin-left: 5px;
 }
+/* 奖项展示样式 - 含图标适配 */
+.awards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
+.award-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 20px;
+  background-color: #f8f9fc;
+  border-radius: 12px;
+  border-left: 3px solid #722ed1; /* 紫色边框区分奖项区 */
+  align-items: center; /* 图标/时间/内容垂直居中 */
+}
+
+/* 奖项图标样式 */
+.award-icon {
+  font-size: 18px;
+  color: #165dff; /* 主色调蓝色，呼应整体风格 */
+  min-width: 24px; /* 固定图标宽度，排版更整齐 */
+  text-align: center;
+}
+
+.award-time {
+  font-weight: 600;
+  color: #722ed1; /* 紫色年份，与边框呼应 */
+  min-width: 80px; /* 适配图标后缩小时间宽度 */
+}
+
+.award-content {
+  color: #4e5969;
+  flex: 1; /* 内容自动占满剩余空间 */
+}
+
+/* 响应式适配 - 手机端奖项区 */
+@media (max-width: 768px) {
+  .award-item {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start; /* 手机端左对齐更美观 */
+  }
+
+  .award-icon {
+    min-width: auto;
+    margin-bottom: 4px; /* 手机端图标下方留间距 */
+  }
+
+  .award-time {
+    min-width: auto;
+  }
+}
 /* 页脚样式 - 与头部渐变呼应 */
 .footer {
   text-align: center;
@@ -263,3 +316,4 @@ body {
 .fa-weixin {
   font-size: 24px !important;
 }
+
