@@ -1,153 +1,265 @@
-/* 全局样式重置 */
+/* 全局基础样式 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.3s ease; /* 全局平滑过渡 */
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
-  line-height: 1.6;
-  max-width: 800px;
+  font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background-color: #f0f4f9; /* 柔和浅蓝背景 */
+  color: #1d2129; /* 主文字色 */
+  line-height: 1.7;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
-/* 头部样式 */
+/* 头部样式 - 渐变背景+精致布局 */
 .header {
   text-align: center;
-  padding: 30px 0;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 30px;
+  padding: 60px 20px;
+  margin: 40px 0 30px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #165dff 0%, #722ed1 100%); /* 蓝紫渐变 */
+  color: white;
+  box-shadow: 0 8px 30px rgba(22, 93, 255, 0.2);
 }
 
 .avatar img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
-  border: 4px solid #fff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
+  border: 5px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  margin-bottom: 25px;
 }
 
 .header h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
 }
 
 .tag {
-  color: #666;
-  font-size: 16px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+
+/* 联系方式 - 圆形图标+hover动效 */
+.contact {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .contact a {
-  color: #333;
-  font-size: 20px;
-  margin: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 22px;
   text-decoration: none;
-  transition: color 0.3s;
 }
 
 .contact a:hover {
-  color: #0078ff;
+  background-color: white;
+  color: #165dff;
+  transform: scale(1.1); /* hover放大 */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* 技能区样式 */
-.skills {
-  margin-bottom: 30px;
+/* 通用区块样式 */
+.section {
+  margin-bottom: 45px;
+  background-color: white;
+  padding: 35px 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.skills h2 {
-  font-size: 22px;
-  margin-bottom: 20px;
-  color: #222;
-  border-left: 4px solid #0078ff;
-  padding-left: 10px;
-}
-
-.skills-list {
+.section h2 {
+  font-size: 24px;
+  color: #165dff;
+  margin-bottom: 25px;
+  padding-left: 15px;
+  border-left: 4px solid #722ed1; /* 侧边装饰线 */
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 }
 
-.skills-list span {
-  background-color: #fff;
-  padding: 8px 16px;
-  border-radius: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  color: #555;
+.section h2 i {
+  font-size: 20px;
+  color: #722ed1;
 }
 
-/* 项目区样式 */
-.projects {
-  margin-bottom: 30px;
+/* 教育背景样式 */
+.edu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.projects h2 {
-  font-size: 22px;
+.edu-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 18px 20px;
+  background-color: #f8f9fc;
+  border-radius: 12px;
+  border-left: 3px solid #165dff;
+}
+
+.edu-time {
+  font-weight: 600;
+  color: #722ed1;
+  min-width: 120px;
+}
+
+.edu-content {
+  color: #4e5969;
+  flex: 1;
+}
+
+/* 论文卡片样式 - 渐变边框+hover提升 */
+.paper-card {
+  padding: 25px;
+  border-radius: 12px;
+  background-color: white;
+  border: 1px solid #eee;
   margin-bottom: 20px;
-  color: #222;
-  border-left: 4px solid #0078ff;
-  padding-left: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
-.project-card {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  margin-bottom: 15px;
-  transition: transform 0.3s;
+/* 卡片渐变边框效果 */
+.paper-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #165dff, #722ed1);
 }
 
-.project-card:hover {
+.paper-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(22, 93, 255, 0.1);
 }
 
-.project-card h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #222;
+.paper-card h3 {
+  font-size: 19px;
+  color: #1d2129;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 
-.project-card p {
-  color: #666;
-  margin-bottom: 15px;
+.paper-card p {
+  color: #4e5969;
+  margin-bottom: 20px;
+  line-height: 1.7;
 }
 
-.project-card a {
-  color: #0078ff;
+.paper-card a {
+  display: inline-block;
+  padding: 8px 18px;
+  background-color: #165dff;
+  color: white;
   text-decoration: none;
+  border-radius: 8px;
   font-size: 14px;
 }
 
-.project-card a:hover {
-  text-decoration: underline;
+.paper-card a:hover {
+  background-color: #0e48d9;
+  transform: translateX(3px);
 }
 
-/* 页脚样式 */
+.paper-card a i {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* 页脚样式 - 与头部渐变呼应 */
 .footer {
   text-align: center;
-  padding: 20px 0;
-  border-top: 1px solid #eee;
-  color: #666;
-  font-size: 14px;
+  padding: 40px 20px;
+  margin: 30px 0 50px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #722ed1 0%, #165dff 100%);
+  color: white;
+  box-shadow: 0 8px 30px rgba(22, 93, 255, 0.2);
 }
 
-/* 响应式：手机适配 */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
+.footer p {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.footer-sub {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* 响应式适配 - 手机端优化 */
+@media (max-width: 768px) {
+  .header {
+    padding: 40px 15px;
+    margin: 20px 0;
   }
+
   .avatar img {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
   }
+
   .header h1 {
-    font-size: 24px;
+    font-size: 26px;
   }
+
+  .section {
+    padding: 25px 20px;
+    margin-bottom: 30px;
+  }
+
+  .section h2 {
+    font-size: 20px;
+  }
+
+  .edu-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .edu-time {
+    min-width: auto;
+  }
+
+  .paper-card {
+    padding: 20px;
+  }
+
+  .paper-card h3 {
+    font-size: 17px;
+  }
+}
+
+/* 兼容微信图标显示 */
+.fa-weixin {
+  font-size: 24px !important;
 }
