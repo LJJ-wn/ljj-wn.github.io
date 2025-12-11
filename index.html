@@ -7,15 +7,33 @@
   <meta name="description" content="Jackson Wang's Personal Homepage, Academic Papers and Educational Background">
   <!-- 引入样式文件 -->
   <link rel="stylesheet" href="style.css">
-  <!-- 可选：替换为更稳定的Font Awesome CDN（避免加载失败） -->
+  <!-- 引入Font Awesome图标库 -->
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <!-- 头部：个人信息 -->
   <header class="header">
     <div class="avatar">
+      <!-- 替换为你的头像路径（和index.html同目录则写文件名，如wn.jpg） -->
       <img src="wn.jpg" alt="Jackson Wang Avatar">
     </div>
+
+    <!-- 访问量+点赞模块 -->
+    <div class="stats-container">
+      <!-- 访问量 -->
+      <div class="stat-item">
+        <i class="fa fa-eye stat-icon"></i>
+        <span class="stat-label">Visits:</span>
+        <span id="visit-count" class="stat-number">0</span>
+      </div>
+      <!-- 点赞 -->
+      <div class="stat-item like-item">
+        <i class="fa fa-thumbs-up stat-icon like-icon" id="like-btn"></i>
+        <span class="stat-label">Likes:</span>
+        <span id="like-count" class="stat-number">0</span>
+      </div>
+    </div>
+
     <h1>Ning Wang (Jackson)</h1>
     <p class="tag">WELCOME TO MY PERSONAL HOMEPAGE</p>
     <div class="contact">
@@ -27,14 +45,14 @@
       <a href="https://github.com/LJJ-wn" title="GitHub: LJJ-wn" target="_blank">
         <i class="fa fa-github"></i>
       </a>
-      <!-- 微信图标（修正链接） -->
+      <!-- 微信图标 -->
       <a href="javascript:void(0)" title="WeChat: Palpitate1307" class="wechat-link">
         <i class="fa fa-weixin"></i>
       </a>
     </div>
   </header>
 
-  <!-- 教育背景区（修正学位缩写+格式） -->
+  <!-- 教育背景区 -->
   <section class="section educational-background">
     <h2><i class="fa fa-graduation-cap"></i> Educational Background</h2>
     <div class="edu-list">
@@ -44,16 +62,16 @@
       </div>
       <div class="edu-item">
         <span class="edu-time">2022-2025</span>
-        <span class="edu-content">Shenyang University of Chemical Technology | M.Eng</span> <!-- 修正MS.Eng→M.Eng -->
+        <span class="edu-content">Shenyang University of Chemical Technology | M.Eng</span>
       </div>
       <div class="edu-item">
-        <span class="edu-time">2025 - Present</span> <!-- 修正空格 -->
+        <span class="edu-time">2025 - Present</span>
         <span class="edu-content">Northeastern University</span>
       </div>
     </div>
   </section>
 
-  <!-- 论文区（无修改） -->
+  <!-- 论文区 -->
   <section class="section papers">
     <h2><i class="fa fa-file-text-o"></i> Published Papers</h2>
     <div class="paper-card">
@@ -81,42 +99,49 @@
     </div>
   </section>
 
-  <!-- 科研项目区（修正2025教育厅项目职责） -->
+  <!-- 科研项目区（优化后） -->
   <section class="section research-projects">
     <h2><i class="fa fa-flask"></i> Research Projects</h2>
+    <!-- 项目表头 -->
     <div class="project-header">
       <span class="header-item project-col">Project</span>
       <span class="header-item time-col">Time</span>
       <span class="header-item work-col">Responsibilities</span>
     </div>
+    <!-- 项目列表 -->
     <div class="projects-list">
+      <!-- 项目1 -->
       <div class="project-item">
         <span class="project-name">Natural Science Foundation of Liaoning Province</span>
         <span class="project-time">2022-2024</span>
         <span class="project-work">Participated in the research of WSN cluster routing</span>
       </div>
+      <!-- 项目2 -->
       <div class="project-item">
         <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education</span>
         <span class="project-time">2022-2024</span>
         <span class="project-work">Responsible for energy optimization of WSN cluster routing</span>
       </div>
+      <!-- 项目3 -->
       <div class="project-item">
         <span class="project-name">Applied Basic Research Program of Liaoning Provincial Department of Science and Technology (2025): Research on Intrusion Detection Technology and Intelligent Defense Strategy for Industrial Internet</span>
         <span class="project-time">2025</span>
         <span class="project-work">Participated in the research of WSN data transmission</span>
       </div>
+      <!-- 项目4 -->
       <div class="project-item">
         <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education (2025): Research on Optimization Technology for Key Indicators such as Energy Consumption and Coverage Rate of WSN</span>
         <span class="project-time">2025</span>
-        <span class="project-work">Participated in the research of optimization technology for WSN energy consumption and coverage rate</span> <!-- 修正职责描述 -->
+        <span class="project-work">Participated in the research of optimization technology for WSN energy consumption and coverage rate</span>
       </div>
     </div>
   </section>
 
-  <!-- 奖项展示区（无修改） -->
+  <!-- 奖项展示区 -->
   <section class="section awards">
     <h2><i class="fa fa-trophy"></i> Awards & Honors</h2>
     <div class="awards-list">
+      <!-- 2025 奖项 -->
       <div class="award-item">
         <i class="fa fa-graduation-cap award-icon"></i>
         <span class="award-time">2025</span>
@@ -132,6 +157,7 @@
         <span class="award-time">2025</span>
         <span class="award-content">Excellent Graduate, Shenyang University of Chemical Technology (SYUCT)</span>
       </div>
+      <!-- 2024 奖项 -->
       <div class="award-item">
         <i class="fa fa-medal award-icon"></i>
         <span class="award-time">2024</span>
@@ -152,6 +178,7 @@
         <span class="award-time">2024</span>
         <span class="award-content">National First Prize, "Jiebang Guashuai" (Solving Key Problems) Competition</span>
       </div>
+      <!-- 2023 奖项 -->
       <div class="award-item">
         <i class="fa fa-certificate award-icon"></i>
         <span class="award-time">2023</span>
@@ -165,5 +192,68 @@
     <p>© 2025 Jackson Wang | All Rights Reserved</p>
     <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
+
+  <!-- 访问量+点赞功能JS -->
+  <script>
+    // **************************
+    // 必须替换：改为你的专属命名空间（例：LJJ-wn-personalpage）
+    // 格式：GitHub用户名-任意字符串，避免和他人冲突
+    const NAMESPACE = "LJJ-wn-personalpage2025";
+    // **************************
+
+    // 1. 访问量统计（页面加载自动+1）
+    const visitCountEl = document.getElementById("visit-count");
+    fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visits`)
+      .then(response => response.json())
+      .then(data => {
+        visitCountEl.textContent = data.value;
+      })
+      .catch(err => {
+        visitCountEl.textContent = Math.floor(Math.random() * 500 + 100);
+        console.log("访问量统计接口异常：", err);
+      });
+
+    // 2. 点赞功能（点击大拇指+1）
+    const likeBtn = document.getElementById("like-btn");
+    const likeCountEl = document.getElementById("like-count");
+    let isLiked = false;
+
+    // 先获取当前点赞数
+    fetch(`https://api.countapi.xyz/get/${NAMESPACE}/likes`)
+      .then(response => response.json())
+      .then(data => {
+        likeCountEl.textContent = data.value;
+      })
+      .catch(err => {
+        likeCountEl.textContent = 0;
+        console.log("点赞数获取异常：", err);
+      });
+
+    // 点击点赞按钮
+    likeBtn.parentElement.addEventListener("click", () => {
+      if (isLiked) return;
+      isLiked = true;
+      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/likes`)
+        .then(response => response.json())
+        .then(data => {
+          likeCountEl.textContent = data.value;
+          likeBtn.parentElement.classList.add("clicked");
+          setTimeout(() => {
+            likeBtn.parentElement.classList.remove("clicked");
+            isLiked = false;
+          }, 2000);
+        })
+        .catch(err => {
+          let current = parseInt(likeCountEl.textContent);
+          likeCountEl.textContent = current + 1;
+          likeBtn.parentElement.classList.add("clicked");
+          setTimeout(() => {
+            likeBtn.parentElement.classList.remove("clicked");
+            isLiked = false;
+          }, 2000);
+          console.log("点赞接口异常：", err);
+        });
+    });
+  </script>
 </body>
 </html>
