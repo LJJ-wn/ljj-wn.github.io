@@ -12,7 +12,8 @@ html {
 }
 
 body {
-  font-family: "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* 优化：补充Inter字体兜底，确保所有设备显示正常 */
+  font-family: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
   background-color: #f0f4f9; /* 柔和浅蓝背景 */
   color: #1d2129; /* 主文字色 */
   line-height: 1.7;
@@ -194,9 +195,17 @@ body {
   font-size: 12px;
   margin-left: 5px;
 }
+
 /* 科研项目样式 */
 .research-projects {
   overflow-x: auto; /* 适配长项目名称，防止横向溢出 */
+  /* 优化：隐藏多余滚动条，提升视觉体验 */
+  scrollbar-width: none; /* 火狐 */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+/* 优化：隐藏Chrome/Safari滚动条 */
+.research-projects::-webkit-scrollbar {
+  display: none;
 }
 
 /* 项目表头 */
@@ -265,28 +274,6 @@ body {
   padding: 0 8px;
 }
 
-/* 响应式适配 - 手机端科研项目区 */
-@media (max-width: 768px) {
-  .project-header {
-    font-size: 14px;
-  }
-  .project-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 15px 18px;
-  }
-  .project-name, .project-time, .project-work {
-    flex: none;
-    width: 100%;
-    text-align: left;
-    padding: 0;
-  }
-  .project-time {
-    color: #165dff;
-    font-size: 14px;
-  }
-}
 /* 奖项展示样式 - 含图标适配 */
 .awards-list {
   display: flex;
@@ -324,23 +311,6 @@ body {
   flex: 1; /* 内容自动占满剩余空间 */
 }
 
-/* 响应式适配 - 手机端奖项区 */
-@media (max-width: 768px) {
-  .award-item {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start; /* 手机端左对齐更美观 */
-  }
-
-  .award-icon {
-    min-width: auto;
-    margin-bottom: 4px; /* 手机端图标下方留间距 */
-  }
-
-  .award-time {
-    min-width: auto;
-  }
-}
 /* 页脚样式 - 与头部渐变呼应 */
 .footer {
   text-align: center;
@@ -362,46 +332,80 @@ body {
   opacity: 0.8;
 }
 
-/* 响应式适配 - 手机端优化 */
+/* 优化：合并所有响应式媒体查询，减少冗余 */
 @media (max-width: 768px) {
+  /* 头部适配 */
   .header {
     padding: 40px 15px;
     margin: 20px 0;
   }
-
   .avatar img {
     width: 120px;
     height: 120px;
   }
-
   .header h1 {
     font-size: 26px;
   }
 
+  /* 通用区块适配 */
   .section {
     padding: 25px 20px;
     margin-bottom: 30px;
   }
-
   .section h2 {
     font-size: 20px;
   }
 
+  /* 教育背景适配 */
   .edu-item {
     flex-direction: column;
     gap: 8px;
   }
-
   .edu-time {
     min-width: auto;
   }
 
+  /* 论文卡片适配 */
   .paper-card {
     padding: 20px;
   }
-
   .paper-card h3 {
     font-size: 17px;
+  }
+
+  /* 科研项目适配 */
+  .project-header {
+    font-size: 14px;
+  }
+  .project-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 15px 18px;
+  }
+  .project-name, .project-time, .project-work {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+  }
+  .project-time {
+    color: #165dff;
+    font-size: 14px;
+  }
+
+  /* 奖项适配 */
+  .award-item {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start; /* 手机端左对齐更美观 */
+  }
+  .award-icon {
+    min-width: auto;
+    margin-bottom: 4px; /* 手机端图标下方留间距 */
+  }
+  .award-time {
+    min-width: auto;
   }
 }
 
@@ -409,5 +413,3 @@ body {
 .fa-weixin {
   font-size: 24px !important;
 }
-
-
