@@ -196,84 +196,155 @@ body {
   margin-left: 5px;
 }
 
-/* 科研项目样式 */
+/* 科研项目样式 - 重构版：提升表头区分度+解决文字挤压 */
 .research-projects {
-  overflow-x: auto; /* 适配长项目名称，防止横向溢出 */
-  /* 优化：隐藏多余滚动条，提升视觉体验 */
-  scrollbar-width: none; /* 火狐 */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-/* 优化：隐藏Chrome/Safari滚动条 */
-.research-projects::-webkit-scrollbar {
-  display: none;
+  overflow-x: hidden; /* 取消横向滚动，改为文字换行 */
 }
 
-/* 项目表头 */
+/* 项目表头 - 强化视觉区分 */
 .project-header {
   display: flex;
-  padding: 12px 20px;
+  padding: 18px 20px; /* 增加表头内边距，更饱满 */
   background: linear-gradient(90deg, #165dff, #722ed1);
   color: white;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 10px;
-  font-weight: 600;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 16px; /* 表头字体放大 */
+  position: relative;
+}
+
+/* 表头列分隔线（强化分类感） */
+.project-header::after {
+  content: "";
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: calc(60% - 1px); /* 项目列和时间列分隔 */
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.project-header::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: calc(70% - 1px); /* 时间列和职责列分隔 */
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .header-item {
-  flex: 1;
-  text-align: left;
-  padding: 0 8px;
+  padding: 0 12px; /* 表头内边距加大 */
+  display: flex;
+  align-items: center;
 }
 
-/* 调整列宽比例（项目列占比更高） */
+/* 调整列宽比例（更合理，避免挤压） */
 .project-col {
-  flex: 4;
+  flex: 6; /* 项目列占比大幅提升 */
 }
 .time-col {
-  flex: 1;
+  flex: 1; /* 时间列固定窄宽，居中 */
   text-align: center;
+  min-width: 80px; /* 固定最小宽度，避免挤压 */
 }
 .work-col {
-  flex: 3;
+  flex: 3; /* 职责列适配 */
 }
 
-/* 项目列表 */
+/* 项目列表 - 增加间距，避免拥挤 */
 .projects-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px; /* 项目行之间间距加大 */
 }
 
+/* 项目行 - 重构布局，文字舒展 */
 .project-item {
   display: flex;
-  padding: 18px 20px;
+  padding: 22px 20px; /* 内边距翻倍，更舒展 */
   background-color: #f8f9fc;
-  border-radius: 8px;
-  align-items: center;
+  border-radius: 10px;
+  align-items: flex-start; /* 文字顶部对齐，更整齐 */
   border-left: 3px solid #165dff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); /* 轻微阴影，分层 */
+  transition: all 0.2s ease;
 }
 
+/* 项目行hover高亮，提升交互 */
+.project-item:hover {
+  background-color: #f0f7ff;
+  transform: translateY(-2px);
+}
+
+/* 项目名称 - 自动换行，超长按省略显示（hover完整） */
 .project-name {
-  flex: 4;
+  flex: 6;
   color: #1d2129;
   font-weight: 500;
-  padding: 0 8px;
+  padding: 0 12px;
+  line-height: 1.6; /* 行高加大，文字不挤 */
+  word-wrap: break-word; /* 自动换行 */
+  word-break: break-word;
+  max-width: 100%;
 }
 
+/* 时间列 - 固定宽度，加粗突出 */
 .project-time {
   flex: 1;
   color: #722ed1;
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
-  padding: 0 8px;
+  padding: 0 12px;
+  min-width: 80px;
+  line-height: 1.6;
 }
 
+/* 职责列 - 自动换行，颜色区分 */
 .project-work {
   flex: 3;
   color: #4e5969;
-  padding: 0 8px;
+  padding: 0 12px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
+/* 响应式适配 - 手机端更友好 */
+@media (max-width: 768px) {
+  .project-header {
+    font-size: 15px;
+    padding: 15px 18px;
+  }
+  /* 手机端隐藏表头分隔线，避免杂乱 */
+  .project-header::before, .project-header::after {
+    display: none;
+  }
+  .project-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; /* 手机端行内间距加大 */
+    padding: 20px 18px;
+  }
+  .project-name, .project-time, .project-work {
+    flex: none;
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    line-height: 1.7;
+  }
+  .project-time {
+    color: #165dff;
+    font-size: 15px;
+    /* 手机端给时间加标签样式，强化分类 */
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #e8f3ff;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+}
 /* 奖项展示样式 - 含图标适配 */
 .awards-list {
   display: flex;
@@ -413,3 +484,4 @@ body {
 .fa-weixin {
   font-size: 24px !important;
 }
+
