@@ -7,8 +7,8 @@
   <meta name="description" content="Jackson Wang's Personal Homepage, Academic Papers and Educational Background">
   <!-- 引入样式文件 -->
   <link rel="stylesheet" href="style.css">
-  <!-- 引入Font Awesome图标库 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+  <!-- 可选：替换为更稳定的Font Awesome CDN（避免加载失败） -->
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <!-- 头部：个人信息 -->
@@ -27,14 +27,14 @@
       <a href="https://github.com/LJJ-wn" title="GitHub: LJJ-wn" target="_blank">
         <i class="fa fa-github"></i>
       </a>
-      <!-- 微信图标（修正后） -->
-      <a href=" Palpitate1307" title="WeChat: Palpitate1307" class="wechat-link">
+      <!-- 微信图标（修正链接） -->
+      <a href="javascript:void(0)" title="WeChat: Palpitate1307" class="wechat-link">
         <i class="fa fa-weixin"></i>
       </a>
     </div>
   </header>
 
-  <!-- 教育背景区（修正class名：去掉空格） -->
+  <!-- 教育背景区（修正学位缩写+格式） -->
   <section class="section educational-background">
     <h2><i class="fa fa-graduation-cap"></i> Educational Background</h2>
     <div class="edu-list">
@@ -43,17 +43,17 @@
         <span class="edu-content">Dezhou University | Network Engineering | B.Eng.</span>
       </div>
       <div class="edu-item">
-        <span class="edu-time">2022-2025</span> <!-- 修正笔误：2022-2015 → 2022-2025 -->
-        <span class="edu-content">Shenyang University of Chemical Technology | MS.Eng</span>
+        <span class="edu-time">2022-2025</span>
+        <span class="edu-content">Shenyang University of Chemical Technology | M.Eng</span> <!-- 修正MS.Eng→M.Eng -->
       </div>
       <div class="edu-item">
-        <span class="edu-time">2025- Present</span>
+        <span class="edu-time">2025 - Present</span> <!-- 修正空格 -->
         <span class="edu-content">Northeastern University</span>
       </div>
     </div>
   </section>
 
-  <!-- 论文区（修正class名：小写+统一） -->
+  <!-- 论文区（无修改） -->
   <section class="section papers">
     <h2><i class="fa fa-file-text-o"></i> Published Papers</h2>
     <div class="paper-card">
@@ -80,94 +80,86 @@
       </a>
     </div>
   </section>
-  <!-- 科研项目区 -->
-<section class="section research-projects">
-  <h2><i class="fa fa-flask"></i> Research Projects</h2>
-  <!-- 项目表头 -->
-  <div class="project-header">
-    <span class="header-item project-col">Project</span>
-    <span class="header-item time-col">Time</span>
-    <span class="header-item work-col">Responsibilities</span>
-  </div>
-  <!-- 项目列表 -->
-  <div class="projects-list">
-    <!-- 项目1 -->
-    <div class="project-item">
-      <span class="project-name">Natural Science Foundation of Liaoning Province</span>
-      <span class="project-time">2022-2024</span>
-      <span class="project-work">Participated in the research of WSN cluster routing</span>
-    </div>
-    <!-- 项目2 -->
-    <div class="project-item">
-      <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education</span>
-      <span class="project-time">2022-2024</span>
-      <span class="project-work">Responsible for energy optimization of WSN cluster routing</span>
-    </div>
-    <!-- 项目3 -->
-    <div class="project-item">
-      <span class="project-name">Applied Basic Research Program of Liaoning Provincial Department of Science and Technology (2025): Research on Intrusion Detection Technology and Intelligent Defense Strategy for Industrial Internet</span>
-      <span class="project-time">2025</span>
-      <span class="project-work">Participated in the research of WSN data transmission</span>
-    </div>
-    <!-- 项目4 -->
-    <div class="project-item">
-      <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education (2025): Research on Optimization Technology for Key Indicators such as Energy Consumption and Coverage Rate of WSN</span>
-      <span class="project-time">2025</span>
-      <span class="project-work">Main participant in the research of WSN key indicator optimization</span>
-    </div>
-  </div>
-</section>
-<!-- 奖项展示区 -->
-<section class="section awards">
-  <h2><i class="fa fa-trophy"></i> Awards & Honors</h2>
-  <div class="awards-list">
-    <!-- 2025 奖项（按时间/重要性排序） -->
-    <div class="award-item">
-      <i class="fa fa-graduation-cap award-icon"></i>
-      <span class="award-time">2025</span>
-      <span class="award-content">Freshman Scholarship, Northeastern University</span>
-    </div>
-    <div class="award-item">
-      <i class="fa fa-user-graduate award-icon"></i>
-      <span class="award-time">2025</span>
-      <span class="award-content">Excellent Graduate, Liaoning Province</span>
-    </div>
-    <div class="award-item">
-      <i class="fa fa-user-graduate award-icon"></i>
-      <span class="award-time">2025</span>
-      <span class="award-content">Excellent Graduate, Shenyang University of Chemical Technology (SYUCT)</span>
-    </div>
 
-    <!-- 2024 奖项 -->
-    <div class="award-item">
-      <i class="fa fa-medal award-icon"></i>
-      <span class="award-time">2024</span>
-      <span class="award-content">National Scholarship</span>
+  <!-- 科研项目区（修正2025教育厅项目职责） -->
+  <section class="section research-projects">
+    <h2><i class="fa fa-flask"></i> Research Projects</h2>
+    <div class="project-header">
+      <span class="header-item project-col">Project</span>
+      <span class="header-item time-col">Time</span>
+      <span class="header-item work-col">Responsibilities</span>
     </div>
-    <div class="award-item">
-      <i class="fa fa-certificate award-icon"></i>
-      <span class="award-time">2024</span>
-      <span class="award-content">First-Class Scholarship, Shenyang University of Chemical Technology (SYUCT)</span>
+    <div class="projects-list">
+      <div class="project-item">
+        <span class="project-name">Natural Science Foundation of Liaoning Province</span>
+        <span class="project-time">2022-2024</span>
+        <span class="project-work">Participated in the research of WSN cluster routing</span>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education</span>
+        <span class="project-time">2022-2024</span>
+        <span class="project-work">Responsible for energy optimization of WSN cluster routing</span>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Applied Basic Research Program of Liaoning Provincial Department of Science and Technology (2025): Research on Intrusion Detection Technology and Intelligent Defense Strategy for Industrial Internet</span>
+        <span class="project-time">2025</span>
+        <span class="project-work">Participated in the research of WSN data transmission</span>
+      </div>
+      <div class="project-item">
+        <span class="project-name">Basic Scientific Research Project of Liaoning Provincial Department of Education (2025): Research on Optimization Technology for Key Indicators such as Energy Consumption and Coverage Rate of WSN</span>
+        <span class="project-time">2025</span>
+        <span class="project-work">Participated in the research of optimization technology for WSN energy consumption and coverage rate</span> <!-- 修正职责描述 -->
+      </div>
     </div>
-    <div class="award-item">
-      <i class="fa fa-trophy award-icon"></i>
-      <span class="award-time">2024</span>
-      <span class="award-content">Gold Award, "Challenge Cup" Competition</span>
-    </div>
-    <div class="award-item">
-      <i class="fa fa-trophy award-icon"></i>
-      <span class="award-time">2024</span>
-      <span class="award-content">National First Prize, "Jiebang Guashuai" (Solving Key Problems) Competition</span>
-    </div>
+  </section>
 
-    <!-- 2023 奖项 -->
-    <div class="award-item">
-      <i class="fa fa-certificate award-icon"></i>
-      <span class="award-time">2023</span>
-      <span class="award-content">First-Class Scholarship, Shenyang University of Chemical Technology (SYUCT)</span>
+  <!-- 奖项展示区（无修改） -->
+  <section class="section awards">
+    <h2><i class="fa fa-trophy"></i> Awards & Honors</h2>
+    <div class="awards-list">
+      <div class="award-item">
+        <i class="fa fa-graduation-cap award-icon"></i>
+        <span class="award-time">2025</span>
+        <span class="award-content">Freshman Scholarship, Northeastern University</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-user-graduate award-icon"></i>
+        <span class="award-time">2025</span>
+        <span class="award-content">Excellent Graduate, Liaoning Province</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-user-graduate award-icon"></i>
+        <span class="award-time">2025</span>
+        <span class="award-content">Excellent Graduate, Shenyang University of Chemical Technology (SYUCT)</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-medal award-icon"></i>
+        <span class="award-time">2024</span>
+        <span class="award-content">National Scholarship</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-certificate award-icon"></i>
+        <span class="award-time">2024</span>
+        <span class="award-content">First-Class Scholarship, Shenyang University of Chemical Technology (SYUCT)</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-trophy award-icon"></i>
+        <span class="award-time">2024</span>
+        <span class="award-content">Gold Award, "Challenge Cup" Competition</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-trophy award-icon"></i>
+        <span class="award-time">2024</span>
+        <span class="award-content">National First Prize, "Jiebang Guashuai" (Solving Key Problems) Competition</span>
+      </div>
+      <div class="award-item">
+        <i class="fa fa-certificate award-icon"></i>
+        <span class="award-time">2023</span>
+        <span class="award-content">First-Class Scholarship, Shenyang University of Chemical Technology (SYUCT)</span>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+
   <!-- 页脚 -->
   <footer class="footer">
     <p>© 2025 Jackson Wang | All Rights Reserved</p>
@@ -175,6 +167,3 @@
   </footer>
 </body>
 </html>
-
-
-
