@@ -9,26 +9,26 @@
   <link rel="stylesheet" href="style.css">
   <!-- 引入Font Awesome图标库 -->
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!-- 引入LeanCloud SDK（实现全网计数） -->
-  <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.17.0/dist/av-min.js"></script>
+  <!-- 引入busuanzi（全网访问量统计） -->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
   <!-- 头部：个人信息 -->
   <header class="header">
     <div class="avatar">
-      <!-- 替换为你的头像路径（和index.html同目录则写wn.jpg） -->
+      <!-- 替换为你的头像路径 -->
       <img src="wn.jpg" alt="Jackson Wang Avatar">
     </div>
 
     <!-- 访问量+点赞模块 -->
     <div class="stats-container">
-      <!-- 访问量 -->
+      <!-- 访问量（busuanzi全网累计） -->
       <div class="stat-item">
         <i class="fa fa-eye stat-icon"></i>
         <span class="stat-label">Visits:</span>
         <span id="visit-count" class="stat-number">0</span>
       </div>
-      <!-- 点赞 -->
+      <!-- 点赞（GitHub Gist全网同步） -->
       <div class="stat-item like-item">
         <i class="fa fa-thumbs-up stat-icon like-icon" id="like-btn"></i>
         <span class="stat-label">Likes:</span>
@@ -195,93 +195,114 @@
     <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
 
-    <!-- 全网累计访问量+点赞功能（修正版） -->
+  <!-- 功能JS（busuanzi访问量 + GitHub Gist全网点赞） -->
   <script>
-    // 1. 初始化LeanCloud（修正服务器地址+正确密钥）
-    AV.init({
-      appId: "xWHyQd14MkPUuubRvKVqFa1Q-MdYXbMMI",
-      appKey: "0lF5Oeo12cOyFcOjjWVXJZ5K",
-      serverURL: "https://api-mumbai.leancloud.app" // 正确的服务器地址（匹配你的appid）
-    });
+    // **************************
+    // 替换为你的Gist ID（第一步创建的）
+    const GIST_ID = "1cb1b19b8575051f9e314a87c96b2d69";
+    // **************************
 
-    // 2. 定义计数类（自动生成ObjectId，避免格式错误）
-    const Counter = AV.Object.extend('Counter');
+    // 1. 初始化DOM元素
     const visitCountEl = document.getElementById("visit-count");
     const likeCountEl = document.getElementById("like-count");
     const likeBtn = document.getElementById("like-btn");
-    let isLiked = false;
+    let isLiked = false; // 防止重复点击
 
-    // 3. 获取最新计数（兼容首次无数据）
-    function getLatestCount() {
-      const query = new AV.Query(Counter);
-      query.descending("createdAt"); // 取最新创建的计数记录
-      query.limit(1);
-      return query.find().then(results => {
-        if (results.length === 0) {
-          // 首次无数据，创建初始记录
-          const newCounter = new Counter();
-          newCounter.set("visitCount", 0);
-          newCounter.set("likeCount", 0);
-          return newCounter.save();
+    // 2. Busuanzi全网访问量（独立访客数）
+    function loadBusuanziCount() {
+      let retry = 0;
+      const timer = setInterval(() => {
+        if (window.busuanzi && busuanzi.siteuv) {
+          clearInterval(timer);
+          visitCountEl.textContent = busuanzi.siteuv;
+        } else if (retry >= 5) {
+          clearInterval(timer);
+          let localVisit = parseInt(localStorage.getItem("local_visit")) || 0;
+          localVisit++;
+          localStorage.setItem("local_visit", localVisit);
+          visitCountEl.textContent = localVisit;
         }
-        return results[0];
-      });
+        retry++;
+      }, 500);
     }
 
-    // 4. 更新访问量（+1）
-    function updateVisitCount() {
-      getLatestCount().then(counter => {
-        const newVisit = counter.get("visitCount") + 1;
-        counter.set("visitCount", newVisit);
-        counter.save().then(() => {
-          visitCountEl.textContent = newVisit;
-        }).catch(err => {
-          console.error("访问量保存失败：", err);
-          visitCountEl.textContent = Math.floor(Math.random() * 100 + 10); // 兜底
+    // 3. 读取GitHub Gist中的全网点赞数
+    async function getGlobalLikeCount() {
+      try {
+        // 用Gistcdn代理解决跨域（关键！）
+        const res = await fetch(`https://gistcdn.githack.com/${GIST_ID}/raw/like_count.json`);
+        const data = await res.json();
+        likeCountEl.textContent = data.count || 0;
+        return data.count || 0;
+      } catch (err) {
+        console.error("读取点赞数失败：", err);
+        // 兜底到本地存储
+        let localLike = parseInt(localStorage.getItem("global_like")) || 0;
+        likeCountEl.textContent = localLike;
+        return localLike;
+      }
+    }
+
+    // 4. 更新GitHub Gist中的点赞数（+1）
+    async function updateGlobalLikeCount(currentCount) {
+      try {
+        // 先获取Gist的最新版本号（必须）
+        const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+        const gistData = await gistRes.json();
+        const sha = gistData.files["like_count.json"].sha;
+
+        // 更新Gist内容
+        await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+          method: "PATCH",
+          headers: {
+            "Accept": "application/vnd.github.v3+json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            files: {
+              "like_count.json": {
+                sha: sha,
+                content: `{"count": ${currentCount + 1}}`
+              }
+            }
+          })
         });
-      });
+        // 更新页面显示
+        likeCountEl.textContent = currentCount + 1;
+        // 本地兜底保存
+        localStorage.setItem("global_like", currentCount + 1);
+      } catch (err) {
+        console.error("更新点赞数失败：", err);
+        // 兜底到本地+1
+        let localLike = parseInt(localStorage.getItem("global_like")) || 0;
+        localLike++;
+        localStorage.setItem("global_like", localLike);
+        likeCountEl.textContent = localLike;
+      }
     }
 
-    // 5. 初始化点赞数显示
-    function initLikeCount() {
-      getLatestCount().then(counter => {
-        likeCountEl.textContent = counter.get("likeCount") || 0;
-      });
-    }
-
-    // 6. 点击点赞（+1）
-    likeBtn.parentElement.addEventListener("click", () => {
+    // 5. 点击点赞按钮逻辑
+    likeBtn.parentElement.addEventListener("click", async () => {
       if (isLiked) return;
       isLiked = true;
-      getLatestCount().then(counter => {
-        const newLike = counter.get("likeCount") + 1;
-        counter.set("likeCount", newLike);
-        counter.save().then(() => {
-          likeCountEl.textContent = newLike;
-          likeBtn.parentElement.classList.add("clicked");
-          setTimeout(() => {
-            likeBtn.parentElement.classList.remove("clicked");
-            isLiked = false;
-          }, 2000);
-        }).catch(err => {
-          console.error("点赞保存失败：", err);
-          let current = parseInt(likeCountEl.textContent);
-          likeCountEl.textContent = current + 1; // 本地兜底
-          likeBtn.parentElement.classList.add("clicked");
-          setTimeout(() => {
-            likeBtn.parentElement.classList.remove("clicked");
-            isLiked = false;
-          }, 2000);
-        });
-      });
+
+      // 获取当前点赞数 → 更新+1
+      const currentCount = await getGlobalLikeCount();
+      await updateGlobalLikeCount(currentCount);
+
+      // 点赞动效
+      likeBtn.parentElement.classList.add("clicked");
+      setTimeout(() => {
+        likeBtn.parentElement.classList.remove("clicked");
+        isLiked = false;
+      }, 2000);
     });
 
-    // 页面加载执行
-    window.onload = function() {
-      updateVisitCount();
-      initLikeCount();
+    // 6. 页面加载初始化
+    window.onload = async function() {
+      loadBusuanziCount(); // 加载访问量
+      await getGlobalLikeCount(); // 加载点赞数
     };
   </script>
 </body>
 </html>
-
