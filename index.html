@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="style.css">
   <!-- 引入Font Awesome图标库 -->
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <!-- 引入busuanzi（全网访问量统计） -->
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </head>
 <body>
   <!-- 头部：个人信息 -->
@@ -22,13 +20,13 @@
 
     <!-- 访问量+点赞模块 -->
     <div class="stats-container">
-      <!-- 访问量（busuanzi全网累计） -->
+      <!-- 访问量（CountAPI全网累计） -->
       <div class="stat-item">
         <i class="fa fa-eye stat-icon"></i>
         <span class="stat-label">Visits:</span>
         <span id="visit-count" class="stat-number">0</span>
       </div>
-      <!-- 点赞（GitHub Gist全网同步） -->
+      <!-- 点赞（CountAPI全网同步） -->
       <div class="stat-item like-item">
         <i class="fa fa-thumbs-up stat-icon like-icon" id="like-btn"></i>
         <span class="stat-label">Likes:</span>
@@ -195,102 +193,77 @@
     <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
 
-  <!-- 功能JS（busuanzi访问量 + GitHub Gist全网点赞） -->
+  <!-- 功能JS（CountAPI全网同步访问量+点赞） -->
   <script>
     // **************************
-    // 替换为你的Gist ID（第一步创建的）
-    const GIST_ID = "1cb1b19b8575051f9e314a87c96b2d69";
+    // 替换为你的专属key（比如 ljjwn2025，小写+数字，不要和别人重复）
+    const UNIQUE_KEY = "ljjwn1307";
     // **************************
 
-    // 1. 初始化DOM元素
+    // CountAPI基础地址（无跨域限制，实时同步）
+    const COUNT_API_BASE = "https://api.countapi.xyz";
+    // 访问量key（全网唯一）
+    const VISIT_KEY = `${UNIQUE_KEY}_visits`;
+    // 点赞量key（全网唯一）
+    const LIKE_KEY = `${UNIQUE_KEY}_likes`;
+
+    // 初始化DOM元素
     const visitCountEl = document.getElementById("visit-count");
     const likeCountEl = document.getElementById("like-count");
     const likeBtn = document.getElementById("like-btn");
     let isLiked = false; // 防止重复点击
 
-    // 2. Busuanzi全网访问量（独立访客数）
-    function loadBusuanziCount() {
-      let retry = 0;
-      const timer = setInterval(() => {
-        if (window.busuanzi && busuanzi.siteuv) {
-          clearInterval(timer);
-          visitCountEl.textContent = busuanzi.siteuv;
-        } else if (retry >= 5) {
-          clearInterval(timer);
-          let localVisit = parseInt(localStorage.getItem("local_visit")) || 0;
-          localVisit++;
-          localStorage.setItem("local_visit", localVisit);
-          visitCountEl.textContent = localVisit;
-        }
-        retry++;
-      }, 500);
-    }
-
-    // 3. 读取GitHub Gist中的全网点赞数
-    async function getGlobalLikeCount() {
+    // 1. 获取CountAPI数值（不存在则初始化为0）
+    async function getCount(key) {
       try {
-        // 用Gistcdn代理解决跨域（关键！）
-        const res = await fetch(`https://gistcdn.githack.com/${GIST_ID}/raw/like_count.json`);
+        const res = await fetch(`${COUNT_API_BASE}/get/${VISIT_KEY.split('_')[0]}/${key}`);
         const data = await res.json();
-        likeCountEl.textContent = data.count || 0;
-        return data.count || 0;
+        return data.value || 0;
       } catch (err) {
-        console.error("读取点赞数失败：", err);
-        // 兜底到本地存储
-        let localLike = parseInt(localStorage.getItem("global_like")) || 0;
-        likeCountEl.textContent = localLike;
-        return localLike;
+        // 初始化计数（首次访问创建）
+        await fetch(`${COUNT_API_BASE}/set/${VISIT_KEY.split('_')[0]}/${key}?value=0`);
+        return 0;
       }
     }
 
-    // 4. 更新GitHub Gist中的点赞数（+1）
-    async function updateGlobalLikeCount(currentCount) {
+    // 2. 增加CountAPI数值（+1）
+    async function incrementCount(key) {
       try {
-        // 先获取Gist的最新版本号（必须）
-        const gistRes = await fetch(`https://api.github.com/gists/${GIST_ID}`);
-        const gistData = await gistRes.json();
-        const sha = gistData.files["like_count.json"].sha;
-
-        // 更新Gist内容
-        await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-          method: "PATCH",
-          headers: {
-            "Accept": "application/vnd.github.v3+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            files: {
-              "like_count.json": {
-                sha: sha,
-                content: `{"count": ${currentCount + 1}}`
-              }
-            }
-          })
-        });
-        // 更新页面显示
-        likeCountEl.textContent = currentCount + 1;
-        // 本地兜底保存
-        localStorage.setItem("global_like", currentCount + 1);
+        const res = await fetch(`${COUNT_API_BASE}/increment/${VISIT_KEY.split('_')[0]}/${key}`);
+        const data = await res.json();
+        return data.value || 0;
       } catch (err) {
-        console.error("更新点赞数失败：", err);
-        // 兜底到本地+1
-        let localLike = parseInt(localStorage.getItem("global_like")) || 0;
-        localLike++;
-        localStorage.setItem("global_like", localLike);
-        likeCountEl.textContent = localLike;
+        console.error("更新计数失败：", err);
+        // 本地兜底+1
+        const localVal = parseInt(localStorage.getItem(key)) || 0;
+        localStorage.setItem(key, localVal + 1);
+        return localVal + 1;
       }
     }
 
-    // 5. 点击点赞按钮逻辑
+    // 3. 初始化访问量（页面加载就+1，全网累计）
+    async function initVisitCount() {
+      const currentCount = await getCount(VISIT_KEY);
+      const newCount = await incrementCount(VISIT_KEY);
+      visitCountEl.textContent = newCount;
+    }
+
+    // 4. 初始化点赞量（显示全网最新值）
+    async function initLikeCount() {
+      const currentCount = await getCount(LIKE_KEY);
+      likeCountEl.textContent = currentCount;
+    }
+
+    // 5. 点击点赞逻辑（全网+1）
     likeBtn.parentElement.addEventListener("click", async () => {
       if (isLiked) return;
       isLiked = true;
 
-      // 获取当前点赞数 → 更新+1
-      const currentCount = await getGlobalLikeCount();
-      await updateGlobalLikeCount(currentCount);
+      // 全网点赞数+1
+      const newLikeCount = await incrementCount(LIKE_KEY);
+      likeCountEl.textContent = newLikeCount;
 
-      // 点赞动效
+      // 点赞动效：金色放大
       likeBtn.parentElement.classList.add("clicked");
       setTimeout(() => {
         likeBtn.parentElement.classList.remove("clicked");
@@ -298,10 +271,10 @@
       }, 2000);
     });
 
-    // 6. 页面加载初始化
+    // 页面加载完成后执行
     window.onload = async function() {
-      loadBusuanziCount(); // 加载访问量
-      await getGlobalLikeCount(); // 加载点赞数
+      await initVisitCount(); // 初始化访问量（+1）
+      await initLikeCount();  // 初始化点赞量
     };
   </script>
 </body>
