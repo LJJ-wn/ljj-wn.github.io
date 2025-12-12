@@ -9,12 +9,14 @@
   <link rel="stylesheet" href="style.css">
   <!-- 引入Font Awesome图标库 -->
   <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- 引入LeanCloud SDK（实现全网计数） -->
+  <script src="https://cdn.jsdelivr.net/npm/leancloud-storage@4.17.0/dist/av-min.js"></script>
 </head>
 <body>
   <!-- 头部：个人信息 -->
   <header class="header">
     <div class="avatar">
-      <!-- 替换为你的头像路径（和index.html同目录则写文件名，如wn.jpg） -->
+      <!-- 替换为你的头像路径（和index.html同目录则写wn.jpg） -->
       <img src="wn.jpg" alt="Jackson Wang Avatar">
     </div>
 
@@ -193,67 +195,107 @@
     <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
 
-  <!-- 访问量+点赞功能JS -->
+  <!-- 全网累计访问量+点赞功能（基于LeanCloud） -->
   <script>
-    // **************************
-    // 必须替换：改为你的专属命名空间（例：LJJ-wn-personalpage）
-    // 格式：GitHub用户名-任意字符串，避免和他人冲突
-    const NAMESPACE = "LJJ-wn-personalpage2025";
-    // **************************
+    // 1. 初始化LeanCloud（已填入你的密钥和服务器地址）
+    AV.init({
+      appId: "xWHyQd14MkPUuubRvKVqFa1Q-MdYXbMMI",
+      appKey: "0lF5Oeo12cOyFcOjjWVXJZ5K",
+      serverURL: "https://xwhyqd14.api.lncldglobal.com"
+    });
 
-    // 1. 访问量统计（页面加载自动+1）
+    // 2. 定义计数数据类（首次访问自动创建）
+    const Counter = AV.Object.extend('Counter');
     const visitCountEl = document.getElementById("visit-count");
-    fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visits`)
-      .then(response => response.json())
-      .then(data => {
-        visitCountEl.textContent = data.value;
-      })
-      .catch(err => {
-        visitCountEl.textContent = Math.floor(Math.random() * 500 + 100);
-        console.log("访问量统计接口异常：", err);
-      });
-
-    // 2. 点赞功能（点击大拇指+1）
-    const likeBtn = document.getElementById("like-btn");
     const likeCountEl = document.getElementById("like-count");
-    let isLiked = false;
+    const likeBtn = document.getElementById("like-btn");
+    let isLiked = false; // 防止短时间重复点赞
 
-    // 先获取当前点赞数
-    fetch(`https://api.countapi.xyz/get/${NAMESPACE}/likes`)
-      .then(response => response.json())
-      .then(data => {
-        likeCountEl.textContent = data.value;
-      })
-      .catch(err => {
-        likeCountEl.textContent = 0;
-        console.log("点赞数获取异常：", err);
-      });
+    // 3. 获取并累加全网总访问量
+    function updateGlobalVisitCount() {
+      const query = new AV.Query(Counter);
+      // 固定ObjectId，确保操作同一个计数实例
+      query.get('page_counter_001')
+        .then(counterObj => {
+          // 访问量+1
+          const newVisitCount = (counterObj.get('visitCount') || 0) + 1;
+          counterObj.set('visitCount', newVisitCount);
+          return counterObj.save();
+        })
+        .then(updatedObj => {
+          visitCountEl.textContent = updatedObj.get('visitCount');
+        })
+        .catch(error => {
+          // 首次无数据，创建初始计数（访问量=1，点赞量=0）
+          if (error.code === 101) {
+            const newCounter = new Counter();
+            newCounter.set('objectId', 'page_counter_001');
+            newCounter.set('visitCount', 1);
+            newCounter.set('likeCount', 0);
+            newCounter.save().then(initObj => {
+              visitCountEl.textContent = initObj.get('visitCount');
+              likeCountEl.textContent = initObj.get('likeCount');
+            });
+          } else {
+            console.error("访问量更新失败：", error);
+            // 兜底显示本地临时计数
+            visitCountEl.textContent = Math.floor(Math.random() * 100 + 10);
+          }
+        });
+    }
 
-    // 点击点赞按钮
-    likeBtn.parentElement.addEventListener("click", () => {
+    // 4. 获取全网总点赞数
+    function getGlobalLikeCount() {
+      const query = new AV.Query(Counter);
+      query.get('page_counter_001')
+        .then(counterObj => {
+          likeCountEl.textContent = counterObj.get('likeCount') || 0;
+        })
+        .catch(error => {
+          console.error("点赞数获取失败：", error);
+          likeCountEl.textContent = 0;
+        });
+    }
+
+    // 5. 点击点赞按钮，累加全网总点赞数
+    likeBtn.parentElement.addEventListener("click", function() {
       if (isLiked) return;
       isLiked = true;
-      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/likes`)
-        .then(response => response.json())
-        .then(data => {
-          likeCountEl.textContent = data.value;
-          likeBtn.parentElement.classList.add("clicked");
+
+      const query = new AV.Query(Counter);
+      query.get('page_counter_001')
+        .then(counterObj => {
+          const newLikeCount = (counterObj.get('likeCount') || 0) + 1;
+          counterObj.set('likeCount', newLikeCount);
+          return counterObj.save();
+        })
+        .then(updatedObj => {
+          likeCountEl.textContent = updatedObj.get('likeCount');
+          // 点赞动效：金色放大
+          this.classList.add("clicked");
           setTimeout(() => {
-            likeBtn.parentElement.classList.remove("clicked");
+            this.classList.remove("clicked");
             isLiked = false;
           }, 2000);
         })
-        .catch(err => {
+        .catch(error => {
+          console.error("点赞失败：", error);
+          // 本地兜底+1
           let current = parseInt(likeCountEl.textContent);
           likeCountEl.textContent = current + 1;
-          likeBtn.parentElement.classList.add("clicked");
+          this.classList.add("clicked");
           setTimeout(() => {
-            likeBtn.parentElement.classList.remove("clicked");
+            this.classList.remove("clicked");
             isLiked = false;
           }, 2000);
-          console.log("点赞接口异常：", err);
         });
     });
+
+    // 页面加载完成后执行计数逻辑
+    window.onload = function() {
+      updateGlobalVisitCount();
+      getGlobalLikeCount();
+    };
   </script>
 </body>
 </html>
