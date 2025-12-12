@@ -20,13 +20,13 @@
 
     <!-- 访问量+点赞模块 -->
     <div class="stats-container">
-      <!-- 访问量（CountAPI全网累计） -->
+      <!-- 访问量（国内API全网累计） -->
       <div class="stat-item">
         <i class="fa fa-eye stat-icon"></i>
         <span class="stat-label">Visits:</span>
         <span id="visit-count" class="stat-number">0</span>
       </div>
-      <!-- 点赞（CountAPI全网同步） -->
+      <!-- 点赞（国内API全网同步） -->
       <div class="stat-item like-item">
         <i class="fa fa-thumbs-up stat-icon like-icon" id="like-btn"></i>
         <span class="stat-label">Likes:</span>
@@ -193,19 +193,18 @@
     <p class="footer-sub">Personal Academic Homepage</p>
   </footer>
 
-  <!-- 功能JS（CountAPI全网同步访问量+点赞） -->
+  <!-- 功能JS（国内count.cc API，全网同步访问量+点赞） -->
   <script>
     // **************************
-    // 替换为你的专属key（比如 ljjwn2025，小写+数字，不要和别人重复）
+    // 替换为你的专属key（比如 ljjwn2025，小写+数字，不要重复）
     const UNIQUE_KEY = "ljjwn1307";
     // **************************
 
-    // CountAPI基础地址（无跨域限制，实时同步）
-    const COUNT_API_BASE = "https://api.countapi.xyz";
-    // 访问量key（全网唯一）
-    const VISIT_KEY = `${UNIQUE_KEY}_visits`;
-    // 点赞量key（全网唯一）
-    const LIKE_KEY = `${UNIQUE_KEY}_likes`;
+    // 国内稳定计数API（无跨域，无需注册）
+    const COUNT_API = "https://count.cc";
+    // 访问量/点赞量标识（全网唯一）
+    const VISIT_ID = `${UNIQUE_KEY}_visits`;
+    const LIKE_ID = `${UNIQUE_KEY}_likes`;
 
     // 初始化DOM元素
     const visitCountEl = document.getElementById("visit-count");
@@ -213,45 +212,53 @@
     const likeBtn = document.getElementById("like-btn");
     let isLiked = false; // 防止重复点击
 
-    // 1. 获取CountAPI数值（不存在则初始化为0）
-    async function getCount(key) {
+    // 1. 获取计数（API返回当前值，不存在则初始化为0）
+    async function getCount(id) {
       try {
-        const res = await fetch(`${COUNT_API_BASE}/get/${VISIT_KEY.split('_')[0]}/${key}`);
-        const data = await res.json();
-        return data.value || 0;
+        const res = await fetch(`${COUNT_API}/${id}`, {
+          method: "GET",
+          cache: "no-cache", // 禁用缓存
+          mode: "cors"       // 允许跨域
+        });
+        const data = await res.text(); // count.cc返回纯数字文本
+        return parseInt(data) || 0;
       } catch (err) {
-        // 初始化计数（首次访问创建）
-        await fetch(`${COUNT_API_BASE}/set/${VISIT_KEY.split('_')[0]}/${key}?value=0`);
-        return 0;
+        // 本地兜底
+        return parseInt(localStorage.getItem(id)) || 0;
       }
     }
 
-    // 2. 增加CountAPI数值（+1）
-    async function incrementCount(key) {
+    // 2. 增加计数（+1，全网同步）
+    async function addCount(id) {
       try {
-        const res = await fetch(`${COUNT_API_BASE}/increment/${VISIT_KEY.split('_')[0]}/${key}`);
-        const data = await res.json();
-        return data.value || 0;
+        // count.cc访问该地址自动+1并返回新值
+        const res = await fetch(`${COUNT_API}/${id}/add/1`, {
+          method: "GET",
+          cache: "no-cache",
+          mode: "cors"
+        });
+        const newVal = parseInt(await res.text()) || 0;
+        localStorage.setItem(id, newVal); // 本地缓存
+        return newVal;
       } catch (err) {
-        console.error("更新计数失败：", err);
         // 本地兜底+1
-        const localVal = parseInt(localStorage.getItem(key)) || 0;
-        localStorage.setItem(key, localVal + 1);
+        const localVal = parseInt(localStorage.getItem(id)) || 0;
+        localStorage.setItem(id, localVal + 1);
         return localVal + 1;
       }
     }
 
-    // 3. 初始化访问量（页面加载就+1，全网累计）
-    async function initVisitCount() {
-      const currentCount = await getCount(VISIT_KEY);
-      const newCount = await incrementCount(VISIT_KEY);
+    // 3. 初始化访问量（页面加载就+1）
+    async function initVisit() {
+      const current = await getCount(VISIT_ID);
+      const newCount = await addCount(VISIT_ID);
       visitCountEl.textContent = newCount;
     }
 
-    // 4. 初始化点赞量（显示全网最新值）
-    async function initLikeCount() {
-      const currentCount = await getCount(LIKE_KEY);
-      likeCountEl.textContent = currentCount;
+    // 4. 初始化点赞量（显示最新值）
+    async function initLike() {
+      const current = await getCount(LIKE_ID);
+      likeCountEl.textContent = current;
     }
 
     // 5. 点击点赞逻辑（全网+1）
@@ -260,8 +267,8 @@
       isLiked = true;
 
       // 全网点赞数+1
-      const newLikeCount = await incrementCount(LIKE_KEY);
-      likeCountEl.textContent = newLikeCount;
+      const newLike = await addCount(LIKE_ID);
+      likeCountEl.textContent = newLike;
 
       // 点赞动效：金色放大
       likeBtn.parentElement.classList.add("clicked");
@@ -271,11 +278,15 @@
       }, 2000);
     });
 
-    // 页面加载完成后执行
-    window.onload = async function() {
-      await initVisitCount(); // 初始化访问量（+1）
-      await initLikeCount();  // 初始化点赞量
-    };
+    // 页面加载完成后执行（禁用缓存）
+    window.addEventListener("load", async () => {
+      // 强制清空缓存（解决同步延迟）
+      localStorage.removeItem(VISIT_ID);
+      localStorage.removeItem(LIKE_ID);
+      // 初始化计数
+      await initVisit();
+      await initLike();
+    }, false);
   </script>
 </body>
 </html>
